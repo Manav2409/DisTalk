@@ -4,6 +4,9 @@
 import { useForm } from 'react-hook-form';
 import * as z from "zod";
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useEffect, useState } from 'react';
+import { FileUpload } from '../ui/file-upload';
+
 import {
     Dialog,
     DialogContent,
@@ -23,7 +26,6 @@ import {
 } from '@/components/ui/form'
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
-import { useEffect, useState } from 'react';
 
 
 export const formSchema = z.object({
@@ -77,7 +79,18 @@ export const InitialModel = () => {
                     className='space-y-8'>
                         <div className='space-y-8 px-6'>
                             <div className='flex items-center justify-center text-center'>
-                                TODO: Image Upload
+                                <FormField 
+                                control={form.control}
+                                name="imageUrl"
+                                render={({field }) => (
+                                    <FormControl>
+                                        <FileUpload 
+                                            endpoint="serverImage"
+                                            value={field.value}
+                                            onChange={field.onChange}
+                                        />
+                                    </FormControl>
+                                )}/>
                             </div>
 
                             <FormField 

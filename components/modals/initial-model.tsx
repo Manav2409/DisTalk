@@ -6,6 +6,7 @@ import * as z from "zod";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from 'react';
 import { FileUpload } from '../ui/file-upload';
+import axios from 'axios';
 
 import {
     Dialog,
@@ -26,6 +27,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
+import { useRouter } from 'next/navigation';
 
 
 export const formSchema = z.object({
@@ -40,6 +42,8 @@ export const formSchema = z.object({
 export const InitialModel = () => {
 
     const [isMounted, setIsMouted] = useState(false);
+
+    const router = useRouter();
 
     useEffect(() => {
         setIsMouted(true);
@@ -56,7 +60,14 @@ export const InitialModel = () => {
     const isLoading = form.formState.isSubmitting;
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
-        console.log(values)
+        try {
+            await axios.post("/api/servers", values)
+            form.reset();
+            router.refresh();
+            window.location.reload();
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     if(!isMounted) {
